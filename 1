@@ -1,0 +1,89 @@
+#include <iostream>
+using namespace std;
+void TimKiemChan(int a[], int n);
+void LeTang(int a[], int n);
+void ChanGiam(int a[], int n);
+
+int main() {
+	int n;
+	int a[100];
+	cout << "Nhap so phan tu cua danh sach: ";
+	cin >> n;
+	cout << "Nhap cac phan tu:";
+	for (int i = 0; i < n; i++) {
+		cin >> a[i];
+	}
+	TimKiemChan(a, n);
+	LeTang(a, n);
+	ChanGiam(a, n);
+
+	return 0;
+}
+void TimKiemChan(int a[], int n) {
+	int x;
+	do {
+		cout << "Nhap so chan can tim: ";
+		cin >> x;
+		if (x % 2 != 0) {
+			cout << "Sai cu phap, vui long nhap lai: " << "\n";
+		}
+	} while (x % 2 != 0);
+	for (int i = 0; i < n; i++) {
+		if (x == a[i]) {
+			cout << "So " << a[i] << " o vi tri thu " << i << endl;
+
+		}
+	}
+}
+void LeTang(int a[], int n) {
+	int m = 0;
+	int b[100];
+	for (int i = 0; i < n; i++) {
+		if (a[i] % 2 != 0)
+		{
+			b[m] = a[i];
+			m++;
+		}
+	}
+	int tg;
+	for (int i = 0; i < m-1; i++) {
+		for (int j = i + 1; j < m; j++) {
+			if (b[i] > b[j]) {
+				tg = b[i];
+				b[i] = b[j];
+				b[j] = tg;
+			}
+		}
+	}
+	cout << "Danh sach so le tang dan la: ";
+	for (int i = 0; i < m; i++) {
+		cout << b[i] << " ";
+	}
+	cout << endl;
+}
+void ChanGiam(int a[], int n) {
+	int m = 0;
+	int b[100];
+	for (int i = 0; i < n; i++) {
+		if (a[i] % 2 == 0)
+		{
+			b[m] = a[i];
+			m++;
+		}
+	}
+	int tg;
+	for (int i = 0; i < m - 1; i++) {
+		for (int j = i + 1; j < m; j++) {
+			if (b[i] < b[j]) {
+				tg = b[i];
+				b[i] = b[j];
+				b[j] = tg;
+			}
+		}
+	}
+	cout << "Danh sach so chan giam dan la: ";
+	for (int i = 0; i < m; i++) {
+		cout << b[i] << " ";
+	}
+	cout << endl;
+}
