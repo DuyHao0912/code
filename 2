@@ -1,130 +1,170 @@
-#include <iostream>
+#include<iostream>
 using namespace std;
-struct node {
-	int data;
-	node* next;
+
+struct TNODE {
+	int key;
+	TNODE* pLeft;
+	TNODE* pRight;
 };
-typedef struct node NODE;
-struct list {
-	NODE* pHead;
-	NODE* pTail;
-};
-typedef struct list LIST;
-void KhoiTao(LIST& ds) {
-	ds.pHead = NULL;
-	ds.pTail = NULL;
+typedef TNODE* TREE;
+
+void CreateTree(TREE& T) {   //tao cay rong
+	T = NULL;
 }
-int KiemTraRong(LIST ds) {
-	if (ds.pHead == NULL) {
-		return 1;
-	}
-	return 0;
-}
-NODE* TaoNODE(int x) {
-	NODE* p;
-	p = new NODE;
-	p->data = x;
-	p->next = NULL;
+
+TNODE* CreateTNode(int x) {
+	TNODE* p;
+	p = new TNODE; //cấp phát vùng nhớ động
+	if (p == NULL)
+
+		exit(1); // thoát
+
+	p->key = x; //gán trường dữ liệu của node = x
+	p->pLeft = NULL;
+	p->pRight = NULL;
 	return p;
 }
-void ChenCuoi(LIST& ds, NODE* p) {
-	if (ds.pHead == NULL) {
-		ds.pHead = p;
-		ds.pTail = p;
+
+void AddNode(TREE& t, TNODE* p)
+{
+	if (t)
+	{
+		if (t->key == p->key)
+			return;
+		if (p->key < t->key)
+			AddNode(t->pLeft, p);
+		else
+			AddNode(t->pRight, p);
 	}
 	else
 	{
-		ds.pTail->next = p;
-		ds.pTail = p;
+		t = p;
 	}
 }
-void Nhap(LIST& ds, int n) {
-	for (int i = 0; i < n; i++) {
-		int x;
-		cin >> x;
-		NODE* p = new NODE;
-		p = TaoNODE(x);
-		ChenCuoi(ds, p);
-	}
-}
-void Xuat(LIST ds) {
-	NODE* p = new NODE;
-	cout << "Danh sach lien ket: ";
-	for (p = ds.pHead; p != NULL; p = p->next) {
-		cout << p->data << " ";
-	}
-}
-NODE* TimKiem(LIST ds, int x) {
-	NODE* p;
-	p = ds.pHead;
-	while ((p != NULL) && (p->data != x)) {
-		p = p->next;
-	}
-	return p;
-}
-void LeTang(LIST ds) {
-	for (NODE* p1 = ds.pHead; p1 != NULL; p1 = p1->next) {
-		for (NODE* p2 = p1->next; p2 != NULL; p2 = p2->next) {
-			if (p1->data % 2 != 0 && p2->data % 2 != 0) {
-				if (p1->data > p2->data) {
-					int tmp = p1->data;
-					p1->data = p2->data;
-					p2->data = tmp;
-				}
-			}
+
+void PrintEven(TREE t)
+{
+	if (t != NULL)
+	{
+		PrintEven(t->pLeft);
+		if (t->key % 2 == 0)
+		{
+			cout << t->key << " ";
 		}
-	}
-	for (NODE* p = ds.pHead; p != NULL; p = p->next) {
-		if (p->data % 2 != 0) {
-			cout << p->data << " ";
-		}
+		PrintEven(t->pRight);
 	}
 }
-void ChanGiam(LIST ds) {
-	for (NODE* p1 = ds.pHead; p1 != NULL; p1 = p1->next) {
-		for (NODE* p2 = p1->next; p2 != NULL; p2 = p2->next) {
-			if (p1->data % 2 == 0 && p2->data % 2 == 0) {
-				if (p1->data < p2->data) {
-					int tmp = p1->data;
-					p1->data = p2->data;
-					p2->data = tmp;
-				}
-			}
+
+int CountEven(TREE t)
+{
+	if (t == NULL)
+		return 0;
+	int dem = CountEven(t->pLeft);
+	if (t->key % 2 == 0)
+		dem++;
+	dem += CountEven(t->pRight);
+	return dem;
+}
+
+int SumEven(TREE t)
+{
+	if (t == NULL)
+		return 0;
+	int sum = 0;
+	if (t->key % 2 == 0)
+		sum += t->key;
+	sum += SumEven(t->pLeft);
+	sum += SumEven(t->pRight);
+	return sum;
+}
+
+void PrintOdd(TREE t)
+{
+	if (t != NULL)
+	{
+		PrintOdd(t->pLeft);
+		if (t->key % 2 == 1)
+		{
+			cout << t->key << " ";
 		}
-	}
-	for (NODE* p = ds.pHead; p != NULL; p = p->next) {
-		if (p->data % 2 == 0) {
-			cout << p->data << " ";
-		}
+		PrintOdd(t->pRight);
 	}
 }
-int main() {
-	LIST ds;
-	int n;
-	cout << "Nhap so luong danh sach: ";
-	cin >> n;
-	KhoiTao(ds);
-	Nhap(ds, n);
-	Xuat(ds);
-	cout << endl;
-	int x;
-	do {
-		cout << "Nhap gia tri can tim kiem: ";
-		cin >> x;
-		if (x % 2 != 0) {
-			cout << "Nhap sai cu phap vui long nhap lai"<<"\n";
-		}
-	} while (x % 2 != 0);
-	NODE* p = new NODE;
-	p = TimKiem(ds, x);
-	if (p == NULL) {
-		cout << "Khong tim thay"<<"\n";
+
+int CountOdd(TREE t)
+{
+	if (t == NULL)
+		return 0;
+	int dem = CountOdd(t->pLeft);
+	if (t->key % 2 == 1)
+		dem++;
+	dem += CountOdd(t->pRight);
+	return dem;
+}
+
+int SumOdd(TREE t)
+{
+	if (t == NULL)
+		return 0;
+	int sum = 0;
+	if (t->key % 2 == 1)
+		sum += t->key;
+	sum += SumOdd(t->pLeft);
+	sum += SumOdd(t->pRight);
+	return sum;
+}
+
+bool isPrime(int x)
+{
+	if(x<=1)
+		return 0;
+	for (int i = 2; i <= sqrt(x); i++)
+	{
+		if (x % i == 0)
+			return 0;
 	}
-	else cout << "Tim thay ket qua"<<"\n";
-	cout << "Danh sach le tang la: ";
-	LeTang(ds);
-	cout << endl;
-	cout << "Danh sach chan giam la: ";
-	ChanGiam(ds);
+	return 1;
+}
+
+void PrintPrime(TREE t)
+{
+	if (t != NULL)
+	{
+		PrintPrime(t->pLeft);
+		if (isPrime(t->key)==1)
+		{
+			cout << t->key << " ";
+		}
+		PrintPrime(t->pRight);
+	}
+}
+
+int CountPrime(TREE t)
+{
+	if (t == NULL)
+		return 0;
+	int dem = CountPrime(t->pLeft);
+	if (isPrime(t->key) == 1)
+		dem++;
+	dem += CountPrime(t->pRight);
+	return dem;
+}
+
+int SumPrime(TREE t)
+{
+	if (t == NULL)
+		return 0;
+	int sum = 0;
+	if (isPrime(t->key) == 1)
+		sum += t->key;
+	sum += SumPrime(t->pLeft);
+	sum += SumPrime(t->pRight);
+	return sum;
+}
+
+int main()
+{
+	TREE t = NULL;
+	CreateTree(t);
 	return 0;
 }
